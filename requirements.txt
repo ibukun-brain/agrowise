@@ -1,0 +1,31 @@
+# channels==3.0.5
+# channels-redis==3.4.0
+cloudinary==1.33.0
+dj-database-url==1.2.0
+django-cloudinary-storage==0.3.0
+Django==4.2.3
+django-auto-prefetch==1.1.0
+# django-ckeditor==6.4.0
+django-cors-headers==4.1.0
+# django-crispy-forms==2.0
+django-filter==23.2
+django-redis==5.2.0
+django-resized==0.3.11
+django-storages==1.12.3
+django-templated-mail==1.1.1
+django-user-agents==0.4.0
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.2.2
+djoser==2.2.0
+drf-spectacular==0.26.3
+drf-spectacular-sidecar==2023.6.1
+# geoip2==4.7.0
+Pillow==9.5.0
+psycopg2-binary==2.9.6
+redis==4.2.0
+user-agents==2.2.0
+whitenoise==6.0.0
+# django-phonenumber-field==7.2.0
+# phonenumbers==8.13.23
+# gunicorn==21.2.0
+social-auth-app-django==2.21
