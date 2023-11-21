@@ -4,7 +4,7 @@
 <!-- ## Useful links
 
 - [Github repo](https://github.com/ibukun-brain/agrowise)
-<!-- - [Theme](https://codescandy.com/coach/bootstrap-5/index.html) --> -->
+<!-- - [Theme](https://codescandy.com/coach/bootstrap-5/index.html) --> 
 
 ## Requirements
 
