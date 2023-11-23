@@ -22,6 +22,7 @@ DJOSER = {
         "http://127.0.0.1:3000",
         "http://127.0.0.1:3000/home",
         "http://127.0.0.1:3000/login",
-        "*",
+        "http://localhost:8000/accounts/profile/",
+        "http://127.0.0.1:8000/accounts/profile/",
     ],
 }

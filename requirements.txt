@@ -29,3 +29,4 @@ whitenoise==6.0.0
 # phonenumbers==8.13.23
 # gunicorn==21.2.0
 social-auth-app-django==5.4.0
+openai==1.3.5

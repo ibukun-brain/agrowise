@@ -20,22 +20,19 @@ class CustomUser(TimeBasedModel, AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
-    username = models.CharField(max_length=50, blank=True)
+    # username = models.CharField(max_length=50, blank=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     uid = models.UUIDField(default=uuid.uuid4)
     email = models.EmailField(verbose_name="email address", unique=True)
     mobile_no = models.CharField(
         max_length=11,
-        unique=True,
-        error_messages={
-            "unique": ("A user with that Mobile Number already exists."),
-        },
+        blank=True,
         validators=[MinLengthValidator(11)],
     )
     date_joined = models.DateTimeField(default=timezone.now)
-    date_of_birth = models.DateField(null=True)
-    gender = models.CharField(max_length=15, choices=Gender.choices)
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=15, choices=Gender.choices, blank=True)
     profile_pic = ResizedImageField(
         upload_to=MediaHelper.get_image_upload_path,
         blank=True,

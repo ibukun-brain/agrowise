@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreatePasswordRetypeSerializer, UserSerializer
+from rest_framework import serializers
 
 from home.models import CustomUser
 
@@ -26,7 +27,7 @@ class CustomUserSerializer(UserSerializer):
         fields = (
             "first_name",
             "last_name",
-            "username",
+            # "username",
             "profile_pic",
             "image_url",
             "email",
@@ -48,3 +49,7 @@ class CustomUserSerializer(UserSerializer):
         data = super().to_representation(instance)
         _ = data.pop("profile_pic")
         return data
+
+
+class OpenAPISerializer(serializers.Serializer):
+    prompt = serializers.CharField(max_length=250)

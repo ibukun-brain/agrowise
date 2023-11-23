@@ -21,7 +21,7 @@ class UserAdmin(DefaultUserAdmin):
                 "fields": (
                     "first_name",
                     "last_name",
-                    "username",
+                    # "username",
                     "email",
                     "mobile_no",
                     "gender",

@@ -4,10 +4,14 @@ from django.contrib import admin
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
+from home.views import RedirectSocial
+
 urlpatterns = [
+    path("api/", include("home.api.urls", namespace="home")),
     path("api/auth/", include("djoser.urls")),
     path("api/auth/", include("djoser.urls.jwt")),
     path("api/oauth/", include("djoser.social.urls")),
+    path("accounts/profile/", RedirectSocial.as_view()),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "api/schema/docs/",
