@@ -17,7 +17,9 @@ class OpenAPIView(generics.CreateAPIView):
     )
     def post(self, request, *args, **kwargs):
         """
-        API endpoint for open api
+        API endpoint for open api answers response to question is related to crops
+        or agriculture or pest or pest alert or weather or weather forecast or crop
+        market insight or agricultural market insight
         """
         serializer = OpenAPISerializer(data=request.data)
         if serializer.is_valid():
