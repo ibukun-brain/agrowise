@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from openai import OpenAI
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -11,7 +12,13 @@ client = OpenAI(api_key=get_env_variable("OPEN_AI_KEY"))
 class OpenAPIView(generics.CreateAPIView):
     serializer_class = OpenAPISerializer
 
+    @extend_schema(
+        request=OpenAPISerializer,
+    )
     def post(self, request, *args, **kwargs):
+        """
+        API endpoint for open api
+        """
         serializer = OpenAPISerializer(data=request.data)
         if serializer.is_valid():
             prompt = serializer.data.get("prompt")
