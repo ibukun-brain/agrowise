@@ -8,7 +8,7 @@ from .base_settings import *
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_env_variable("SECRET_KEY", "XXXX")
 
-ALLOWED_HOSTS.append("agrowise-api.vercel.app")
+ALLOWED_HOSTS.append("*")
 
 INSTALLED_APPS.insert(5, "whitenoise.runserver_nostatic")
 INSTALLED_APPS += [
