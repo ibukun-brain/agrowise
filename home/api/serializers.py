@@ -53,3 +53,7 @@ class CustomUserSerializer(UserSerializer):
 
 class OpenAPISerializer(serializers.Serializer):
     prompt = serializers.CharField(max_length=250)
+
+
+class WeatherForecastSerializer(serializers.Serializer):
+    location = serializers.CharField(max_length=200)
