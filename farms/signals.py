@@ -27,10 +27,10 @@ def pre_save_farm_slug_reciever(sender, instance, **kwargs):
         instance.slug = create_slug(Farm, instance)
     try:
         farm = Farm.objects.get(pk=instance.pk)
-        if instance.name != farm.name:
-            instance.slug = create_slug(Farm, instance)
     except Farm.DoesNotExist:
         pass
+    if instance.name != farm.name:
+        instance.slug = create_slug(Farm, instance)
 
 
 @receiver(pre_save, sender=Crop)
@@ -39,7 +39,7 @@ def pre_save_crop_slug_reciever(sender, instance, **kwargs):
         instance.slug = create_slug(Crop, instance)
     try:
         crop = Crop.objects.get(pk=instance.pk)
-        if instance.name != crop.name:
-            instance.slug = create_slug(Crop, instance)
     except Crop.DoesNotExist:
         pass
+    if instance.name != crop.name:
+        instance.slug = create_slug(Crop, instance)
