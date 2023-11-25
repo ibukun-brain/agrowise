@@ -8,6 +8,7 @@ from home.views import RedirectSocial
 
 urlpatterns = [
     path("api/", include("home.api.urls", namespace="home")),
+    path("api/", include("farms.api.urls", namespace="farms")),
     path("api/auth/", include("djoser.urls")),
     path("api/auth/", include("djoser.urls.jwt")),
     path("api/oauth/", include("djoser.social.urls")),
@@ -24,5 +25,8 @@ urlpatterns = [
 if settings.DEBUG:
     extrapatterns = [path("__debug__/", include("debug_toolbar.urls"))]
     urlpatterns += extrapatterns
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT,
+    )
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

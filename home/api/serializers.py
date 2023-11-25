@@ -1,7 +1,11 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreatePasswordRetypeSerializer, UserSerializer
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from agrowise.utils.urls import get_url
 from home.models import CustomUser
 
 User = get_user_model()
@@ -22,6 +26,17 @@ class CustomUserCreatePasswordRetypeSerializer(UserCreatePasswordRetypeSerialize
 
 
 class CustomUserSerializer(UserSerializer):
+    image_url = serializers.SerializerMethodField("_image_url")
+
+    @extend_schema_field(OpenApiTypes.URI)
+    def _image_url(self, obj):
+        request = self.context["request"]
+        url = get_url(request, path_str=None, default=settings.STATIC_URL)
+        if obj.profile_pic:
+            return obj.profile_pic.url
+
+        return f"{url}image/placeholder.jpg"
+
     class Meta(UserSerializer.Meta):
         model = CustomUser
         fields = (

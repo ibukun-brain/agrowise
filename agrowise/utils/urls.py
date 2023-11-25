@@ -22,7 +22,7 @@ def list_urls(lis, acc=None):
     yield from list_urls(lis[1:], acc)
 
 
-def get_url(request, path_str, args=()):
+def get_url(request, path_str: None, default: None, args=()):
     """
     generates full url using the app urls pattern e.g.
     get_url(request, 'admin:index')
@@ -32,6 +32,7 @@ def get_url(request, path_str, args=()):
     >>> http://localhost:8000/product/1/
     """
     domain = request.get_host().strip("/")
+    default = default.lstrip("/")
     scheme = request.scheme
-    path = reverse(path_str, args=args).strip("/")
+    path = default or reverse(path_str, args=args).strip("/")
     return f"{scheme}://{domain}/{path}"
