@@ -49,7 +49,7 @@ class CustomUserCreatePasswordRetypeSerializer(UserCreatePasswordRetypeSerialize
                 "last_name": last_name,
             }
         )
-        return User(**validated_data)
+        return User.objects.create(**validated_data)
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
