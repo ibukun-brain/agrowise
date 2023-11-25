@@ -15,26 +15,23 @@ class FarmSerializer(serializers.ModelSerializer):
             "address",
             "farm_phone_number",
             "farm_email",
-            "farm_website"
+            "farm_website",
         ]
 
 
 class FieldSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Field
         fields = "__all__"
 
 
 class CropSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Crop
         fields = "__all__"
 
 
 class CropImagesSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CropImages
         fields = "__all__"

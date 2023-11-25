@@ -18,11 +18,12 @@ from agrowise.utils.validators import FileValidatorHelper
 class CustomUser(TimeBasedModel, AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name"]
+    # REQUIRED_FIELDS = ["first_name", "last_name"]
 
     # username = models.CharField(max_length=50, blank=True)
+    full_name = models.CharField(max_length=50, blank=True, null=True)
     first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50, blank=True)
     uid = models.UUIDField(default=uuid.uuid4)
     email = models.EmailField(verbose_name="email address", unique=True)
     mobile_no = models.CharField(
