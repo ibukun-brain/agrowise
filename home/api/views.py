@@ -12,8 +12,8 @@ from home.api.serializers import OpenAPISerializer, WeatherForecastSerializer
 
 # from home.tasks import weather_forecast_task
 
-client = OpenAI(api_key=get_env_variable("OPEN_AI_KEY"))
-API_KEY = get_env_variable("WEATHER_FORECAST_API_KEY")
+client = OpenAI(api_key=get_env_variable("OPEN_AI_KEY", "XXXX_XXX"))
+API_KEY = get_env_variable("WEATHER_FORECAST_API_KEY", "XXX_XXX")
 
 
 class OpenAPIView(generics.CreateAPIView):
