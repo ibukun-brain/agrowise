@@ -12,17 +12,49 @@ User = get_user_model()
 
 
 class CustomUserCreatePasswordRetypeSerializer(UserCreatePasswordRetypeSerializer):
+    full_name = serializers.CharField(max_length=200)
+
     class Meta(UserCreatePasswordRetypeSerializer.Meta):
         model = User
         fields = [
+            "full_name",
             "first_name",
             "last_name",
-            "date_of_birth",
+            # "date_of_birth",
             "email",
-            "mobile_no",
-            "gender",
+            # "mobile_no",
+            # "gender",
             "password",
         ]
+        extra_kwargs = {
+            "first_name": {
+                "read_only": True,
+            },
+            "last_name": {
+                "read_only": True,
+            },
+        }
+
+    def create(self, validated_data):
+        full_name = validated_data.pop("full_name")
+        first_name = full_name.split(" ")[0]
+        last_name = ""
+        try:
+            last_name = full_name.split(" ")[1]
+        except IndexError:
+            last_name = ""
+        validated_data.update(
+            {
+                "first_name": first_name,
+                "last_name": last_name,
+            }
+        )
+        return User(**validated_data)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        _ = data.pop("full_name")
+        return data
 
 
 class CustomUserSerializer(UserSerializer):

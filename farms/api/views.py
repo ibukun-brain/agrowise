@@ -10,8 +10,7 @@ class FarmListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        qs = Farm.objects.select_related("owner") \
-            .filter(owner=self.request.user)
+        qs = Farm.objects.select_related("owner").filter(owner=self.request.user)
         return qs
 
     def perform_create(self, serializer):
@@ -35,7 +34,7 @@ class FarmDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = "slug"
 
     def get_object(self):
-        slug = self.kwargs['slug']
+        slug = self.kwargs["slug"]
         qs = Farm.objects.select_related("owner").get(slug=slug)
         return qs
 
@@ -45,8 +44,9 @@ class ProduceListingCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        qs = ProduceListing.objects.select_related("owner") \
-            .filter(owner=self.request.user)
+        qs = ProduceListing.objects.select_related("owner").filter(
+            owner=self.request.user
+        )
         return qs
 
     def perform_create(self, serializer):
@@ -58,6 +58,6 @@ class ProduceListingDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = "uid"
 
     def get_object(self):
-        uid = self.kwargs['uid']
+        uid = self.kwargs["uid"]
         qs = ProduceListing.objects.select_related("owner").get(uid=uid)
         return qs

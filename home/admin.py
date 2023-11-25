@@ -76,6 +76,7 @@ class UserAdmin(DefaultUserAdmin):
         "first_name",
         "last_name",
     )
+    list_display_link = "name"
     list_display_links = ["first_name", "email"]
     list_filter = ["date_joined", "gender"]
     readonly_fields = ["uid"]
