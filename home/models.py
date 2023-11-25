@@ -66,4 +66,4 @@ class CustomUser(TimeBasedModel, AbstractBaseUser, PermissionsMixin):
         if self.profile_pic:
             return self.profile_pic.url
 
-        return f"http://localhost:8000{settings.STATIC_URL}avatar/placeholder.jpg"
+        return f"http://localhost:8000{settings.STATIC_URL}image/placeholder.jpg"

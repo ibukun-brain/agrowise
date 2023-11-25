@@ -66,12 +66,6 @@ class WeatherForecastAPIView(APIView):
         serializer = WeatherForecastSerializer(data=request.data)
         if serializer.is_valid():
             query = serializer.data.get("location")
-            # response = weather_forecast_task(query)
-            # thread = threading.Thread(
-            #     target=weather_forecast_task,
-            #     args=[query],
-            #     daemon=True,
-            # )
             weather_details = {}
             r = requests.get(
                 "http://api.weatherstack.com/current"

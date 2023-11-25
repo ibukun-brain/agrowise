@@ -22,6 +22,12 @@ class Farm(TimeBasedModel):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["name", "-created_at"]
+        indexes = [
+            models.Index(fields=["name", "-created_at"])
+        ]
+
 
 class Field(TimeBasedModel):
     uid = models.UUIDField(default=uuid.uuid4, primary_key=False, editable=False)
@@ -32,7 +38,7 @@ class Field(TimeBasedModel):
     soil_type = models.CharField(max_length=50, choices=SoilTypes.choices, blank=True)
 
     def __str__(self):
-        return self.uuid
+        return self.uid
 
 
 class Crop(TimeBasedModel):
@@ -74,20 +80,35 @@ class CropImages(TimeBasedModel):
 
 class ProduceListing(TimeBasedModel):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=False)
+    owner = auto_prefetch.ForeignKey(
+        "home.CustomUser",
+        on_delete=models.CASCADE
+    )
     farm = auto_prefetch.ForeignKey(
         "farms.Farm",
         on_delete=models.CASCADE,
+        blank=True,
+        null=True
     )
     crops = models.ForeignKey(
         "farms.Crop",
         on_delete=models.CASCADE,
+        null=True,
     )
+    name = models.CharField(max_length=200)
+    type = models.CharField(max_length=200)
     price = models.PositiveBigIntegerField()
     availability = models.PositiveSmallIntegerField(default=0)
     description = models.TextField()
     image = models.ImageField(
-        upload_to=MediaHelper.get_document_upload_path, blank=True
+        upload_to=MediaHelper.get_image_upload_path, blank=True
     )
+
+    class Meta:
+        ordering = ["name", "-created_at"]
+        indexes = [
+            models.Index(fields=["name", "-created_at"])
+        ]
 
     def __str__(self):
         return self.uid
