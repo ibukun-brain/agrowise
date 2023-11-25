@@ -9,6 +9,6 @@ urlpatterns = [
     path(
         "weather-forecast/",
         view=home_api_view.WeatherForecastAPIView.as_view(),
-        name="weather-forecast"
+        name="weather-forecast",
     ),
 ]

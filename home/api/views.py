@@ -68,21 +68,16 @@ class WeatherForecastAPIView(APIView):
             query = serializer.data.get("location")
             weather_details = {}
             r = requests.get(
-                "http://api.weatherstack.com/current" +
-                f"?access_key={API_KEY}&query={query}"
+                "http://api.weatherstack.com/current"
+                + f"?access_key={API_KEY}&query={query}"
             )
             resp = json.loads(r.text)
             current_weather = resp["current"]
             location_weather = resp["location"]
-            weather_details.update({
-                "current": current_weather,
-                "location": location_weather
-            })
-            return Response(
-                data=weather_details,
-                status=status.HTTP_200_OK
+            weather_details.update(
+                {"current": current_weather, "location": location_weather}
             )
+            return Response(data=weather_details, status=status.HTTP_200_OK)
         return Response(
-            data="Unable to process request",
-            status=status.HTTP_400_BAD_REQUEST
+            data="Unable to process request", status=status.HTTP_400_BAD_REQUEST
         )
