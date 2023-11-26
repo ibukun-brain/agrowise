@@ -42,14 +42,30 @@ class CommentSerializer(serializers.ModelSerializer):
         ]
 
 
+class UserArticleCommentSerializer(serializers.ModelSerializer):
+    article = serializers.StringRelatedField(many=False)
+    user = serializers.StringRelatedField(many=False)
+
+    class Meta:
+        model = Comment
+        fields = [
+            "article",
+            "user",
+            "text",
+            "created_at",
+        ]
+
+
 class ArticleCommentSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(many=False)
     comments = CommentSerializer(many=True, read_only=False)
+    category = serializers.StringRelatedField(many=False)
 
     class Meta:
         model = Article
         fields = [
             "author",
+            "category",
             "name",
             "slug",
             "comments",

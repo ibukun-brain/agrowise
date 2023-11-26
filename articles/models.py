@@ -5,7 +5,7 @@ from django.db import models
 from agrowise.utils.choices import ArticleChoices
 from agrowise.utils.media import MediaHelper
 from agrowise.utils.models import NamedTimeBasedModel, TimeBasedModel, CategoryModel
-from django.template.defaultfilters import striptags, safe, escape
+
 
 class Category(CategoryModel):
     pass
@@ -41,10 +41,14 @@ class Article(NamedTimeBasedModel):
 
     @property
     def comment_count(self):
-        # comment = Comment.objects.select_related("article", "user") \
-        #         .filter(article=self).count()
         comment = self.comments.count()
         return comment
+
+    class Meta:
+        ordering = ('name', "-created_at")
+        indexes = [
+            models.Index(fields=["name", "-created_at"])
+        ]
 
 
 class Comment(TimeBasedModel):
@@ -61,3 +65,9 @@ class Comment(TimeBasedModel):
 
     def __str__(self):
         return f"{self.user} ---> {self.created_at}"
+
+    class Meta:
+        ordering = ("-created_at",)
+        indexes = [
+            models.Index(fields=["-created_at"])
+        ]
