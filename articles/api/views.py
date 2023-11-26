@@ -31,7 +31,8 @@ class ArticleDetailAPIView(generics.RetrieveAPIView):
 
     def get_object(self):
         slug = self.kwargs['slug']
-        qs = Article.objects.select_related('author', "category").get(slug=slug)
+        qs = Article.objects.select_related('author', "category") \
+            .prefetch_related("comments").get(slug=slug)
         return qs
 
     def get(self, request, *args, **kwargs):
@@ -56,5 +57,6 @@ class CommentAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         slug = self.kwargs["slug"]
-        article = Article.objects.select_related('author', "category").get(slug=slug)
+        article = Article.objects.select_related('author', "category") \
+            .prefetch_related("comments").get(slug=slug)
         serializer.save(user=self.request.user, article=article)

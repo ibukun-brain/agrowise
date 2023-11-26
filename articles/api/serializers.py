@@ -69,4 +69,5 @@ class ArticleCommentSerializer(serializers.ModelSerializer):
             "name",
             "slug",
             "comments",
+            "comment_count",
         ]
