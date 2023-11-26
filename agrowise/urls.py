@@ -7,6 +7,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from home.views import RedirectSocial
 
 urlpatterns = [
+    path("api/", include("articles.api.urls", namespace="articles")),
     path("api/", include("home.api.urls", namespace="home")),
     path("api/", include("farms.api.urls", namespace="farms")),
     path("api/", include("communities.api.urls", namespace="communities")),
@@ -21,6 +22,7 @@ urlpatterns = [
         name="swagger-docs",
     ),
     path("admin/", admin.site.urls),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
 if settings.DEBUG:
