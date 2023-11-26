@@ -1,10 +1,11 @@
-from unicodedata import category
-
 from rest_framework import generics, permissions
-from rest_framework.mixins import RetrieveModelMixin
 
-from articles.api.serializers import ArticleCommentSerializer, ArticleSerializer
-from articles.models import Article
+from articles.api.serializers import (
+    ArticleCommentSerializer,
+    ArticleSerializer,
+    UserArticleCommentSerializer,
+)
+from articles.models import Article, Comment
 
 
 class ArticleListAPIView(generics.ListAPIView):
@@ -30,5 +31,30 @@ class ArticleDetailAPIView(generics.RetrieveAPIView):
 
     def get_object(self):
         slug = self.kwargs['slug']
-        qs = Article.objects.select_related('author').get(slug=slug)
+        qs = Article.objects.select_related('author', "category").get(slug=slug)
         return qs
+
+    def get(self, request, *args, **kwargs):
+        """
+        This Endpoint returns a single article
+        """
+        return self.retrieve(request, *args, **kwargs)
+
+
+class CommentAPIView(generics.CreateAPIView):
+    serializer_class = UserArticleCommentSerializer
+
+    def get_queryset(self):
+        qs = Comment.objects.select_related('article', 'user').all()
+        return qs
+
+    def post(self, request, *args, **kwargs):
+        """
+        This endpoint creates a comment for an article
+        """
+        return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        slug = self.kwargs["slug"]
+        article = Article.objects.select_related('author', "category").get(slug=slug)
+        serializer.save(user=self.request.user, article=article)

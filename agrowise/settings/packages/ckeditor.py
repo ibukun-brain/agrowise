@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from agrowise.utils.settings import get_env_variable
+# from agrowise.utils.settings import get_env_variable
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -63,7 +63,7 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 #             ["Cut", "Copy", "Paste", "-", "Undo", "Redo"],
 #             ["Format", "Font", "FontSize"],
 #         ],
-#         "external_plugin_resources": [("youtube", "/assets/js/youtube/", "plugin.js")],
+#         "external_plugin_resources": [("youtube", "/assets/js/youtube/", "plugin.js")]
 #     },
 # }
 

@@ -62,13 +62,13 @@ class CommunityMembershipSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         try:
             return CommunityMembership.objects.create(**validated_data)
-        except IntegrityError:
+        except IntegrityError as e:
             raise serializers.ValidationError(
                 {
                     "error": "You are a member of this community",
                 },
                 code=400,
-            )
+            ) from e
 
 
 class CommunityPostSerializer(serializers.ModelSerializer):

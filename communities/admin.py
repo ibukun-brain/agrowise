@@ -24,5 +24,5 @@ class CommunityPostCommentAdmin(admin.ModelAdmin):
 
 
 @admin.register(CommunityMembership)
-class CommunityMembership(admin.ModelAdmin):
+class CommunityMembershipAdmin(admin.ModelAdmin):
     pass
