@@ -50,6 +50,7 @@ class ArticleCommentSerializer(serializers.ModelSerializer):
         model = Article
         fields = [
             "author",
+            "category",
             "name",
             "slug",
             "comments",
