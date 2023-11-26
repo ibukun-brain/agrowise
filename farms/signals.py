@@ -23,6 +23,7 @@ def create_slug(model, instance, new_slug=None):
 
 @receiver(pre_save, sender=Farm)
 def pre_save_farm_slug_reciever(sender, instance, **kwargs):
+    farm = Farm()
     if not instance.slug:
         instance.slug = create_slug(Farm, instance)
     try:
@@ -35,6 +36,7 @@ def pre_save_farm_slug_reciever(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=Crop)
 def pre_save_crop_slug_reciever(sender, instance, **kwargs):
+    crop = Crop()
     if not instance.slug:
         instance.slug = create_slug(Crop, instance)
     try:
