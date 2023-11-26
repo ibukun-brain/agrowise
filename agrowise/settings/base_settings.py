@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "home",
     "farms",
+    "communities",
     # third party libraries
     "corsheaders",
     "django_filters",

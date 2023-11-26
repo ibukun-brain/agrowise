@@ -9,6 +9,7 @@ from home.views import RedirectSocial
 urlpatterns = [
     path("api/", include("home.api.urls", namespace="home")),
     path("api/", include("farms.api.urls", namespace="farms")),
+    path("api/", include("communities.api.urls", namespace="communities")),
     path("api/auth/", include("djoser.urls")),
     path("api/auth/", include("djoser.urls.jwt")),
     path("api/oauth/", include("djoser.social.urls")),
