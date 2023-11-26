@@ -21,3 +21,8 @@ class SoilTypes(models.TextChoices):
     SandySoil = ("sandy_soil", "Sandy Soil")
     LoamySoil = ("loamy_soil", "Loamy Soil")
     ClaySoil = ("clay_soil", "Clay Soil")
+
+
+class ArticleChoices(models.TextChoices):
+    Draft = ("draft", "Draft")
+    Ready = ("ready", "Ready")

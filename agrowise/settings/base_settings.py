@@ -45,9 +45,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
+    "articles",
     "home",
     "farms",
+    "communities",
     # third party libraries
+    "ckeditor",
+    "ckeditor_uploader",
     "corsheaders",
     "django_filters",
     "social_django",
@@ -158,6 +163,6 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / "static_root"
 
-MEDIA_URL = "/uploads/"
+MEDIA_URL = "/media/"
 
 MEDIA_ROOT = get_env_variable("MEDIA_ROOT", BASE_DIR / "media")

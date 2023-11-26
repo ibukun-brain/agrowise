@@ -45,11 +45,12 @@ class Crop(TimeBasedModel):
         "farms.Field",
         on_delete=models.CASCADE,
         blank=True,
+        null=True,
     )
+    name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True)
     planting_date = models.DateField(null=True, blank=True)
     harvest_date = models.DateField(null=True, blank=True)
-    name = models.CharField(max_length=200)
     image = models.ImageField(blank=True, upload_to=MediaHelper.get_image_upload_path)
     pest_susceptiblity = models.BooleanField(default=False)
 
