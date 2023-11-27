@@ -24,6 +24,9 @@ class CommunitySerializer(serializers.ModelSerializer):
             "created_at",
         ]
 
+    def create(self, validated_data):
+        return Community.object.create(**validated_data)
+
     def to_representation(self, instance):
         request = self.context["request"]
         current_user = request.user
