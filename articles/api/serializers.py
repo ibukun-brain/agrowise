@@ -28,6 +28,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             "status",
             "content",
             "comment_count",
+            "created_at",
         ]
 
 
