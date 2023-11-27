@@ -23,7 +23,7 @@ class CommunitySerializer(serializers.ModelSerializer):
             "members",
             "created_at",
         ]
-
+   
     def create(self, validated_data):
         return Community.object.create(**validated_data)
 
