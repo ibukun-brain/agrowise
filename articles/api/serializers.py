@@ -22,6 +22,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = [
             "author",
             "category",
+            "image",
             "name",
             "slug",
             "status",
@@ -66,7 +67,6 @@ class ArticleCommentSerializer(serializers.ModelSerializer):
         fields = [
             "author",
             "category",
-            "image",
             "name",
             "slug",
             "comments",
