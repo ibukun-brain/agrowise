@@ -54,7 +54,10 @@ class OpenAPIView(generics.CreateAPIView):
                 temperature=0.5,
             )
             response = chat_completion.choices[0].message.content
-            resp = Response(data={"data": response}, status=status.HTTP_200_OK)
+            resp = Response(data={
+                "title": text,
+                "data": response
+            }, status=status.HTTP_200_OK)
             if response != "can't answer this!":
                 AIChatHistory.objects.create(
                     title=text,
