@@ -85,4 +85,7 @@ class UserAdmin(DefaultUserAdmin):
 
 @admin.register(AIChatHistory)
 class AIchatHistoryAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = ["uid"]
+    list_display = ["title", "user", "created_at"]
+    search_fields = ["user__email", "user__first_name"]
+    raw_id_fields = ["user"]
