@@ -46,7 +46,7 @@ class OpenAPIView(generics.CreateAPIView):
                 messages=[
                     {
                         "role": "user",
-                        "content": text,
+                        "content": prompt,
                     }
                 ],
                 model="gpt-3.5-turbo",
