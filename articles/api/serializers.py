@@ -22,6 +22,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = [
             "author",
             "category",
+            "image",
             "name",
             "slug",
             "status",
