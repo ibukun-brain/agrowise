@@ -107,9 +107,14 @@ class WeatherForecastSerializer(serializers.Serializer):
 
 
 class AIChatHistorySerializer(serializers.ModelSerializer):
-    # user = serializers.StringRelatedField(many=False)
+    user = serializers.StringRelatedField(many=False)
 
     class Meta:
         model = AIChatHistory
-        fields = "__all__"
-    
+        fields = [
+            "uid",
+            "user",
+            "title",
+            "trunc_title",
+            "response"
+        ]

@@ -35,18 +35,18 @@ class OpenAPIView(generics.CreateAPIView):
         """
         serializer = OpenAPISerializer(data=request.data)
         if serializer.is_valid():
-            prompt = serializer.data.get("prompt")
+            text = serializer.data.get("prompt")
             prompt = (
                 "if the question is related to crops or agriculture or"
                 + "pest or pest alert or weather or weather forecast or crop market"
                 + "insight or agricultural market insight"
-                + f" - answer it: {prompt} else say can't answer this!"
+                + f" - answer it: {text} else say can't answer this!"
             )
             chat_completion = client.chat.completions.create(
                 messages=[
                     {
                         "role": "user",
-                        "content": prompt,
+                        "content": text,
                     }
                 ],
                 model="gpt-3.5-turbo",
@@ -56,7 +56,7 @@ class OpenAPIView(generics.CreateAPIView):
             response = chat_completion.choices[0].message.content
             resp = Response(data={"data": response}, status=status.HTTP_200_OK)
             AIChatHistory.objects.create(
-                title=prompt,
+                title=text,
                 user=request.user,
                 response=response,
             )
