@@ -12,7 +12,7 @@ class Category(CategoryModel):
 
 
 class Article(NamedTimeBasedModel):
-    name = models.Charfield(max_length=100)
+    name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=True)
     author = auto_prefetch.ForeignKey(
         "home.CustomUser",
