@@ -55,11 +55,12 @@ class OpenAPIView(generics.CreateAPIView):
             )
             response = chat_completion.choices[0].message.content
             resp = Response(data={"data": response}, status=status.HTTP_200_OK)
-            AIChatHistory.objects.create(
-                title=text,
-                user=request.user,
-                response=response,
-            )
+            if response != "can't answer this!":
+                AIChatHistory.objects.create(
+                    title=text,
+                    user=request.user,
+                    response=response,
+                )
             return resp
         return Response(
             data={"data": "unable to process request"},
