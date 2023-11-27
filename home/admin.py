@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from home.models import CustomUser
+from home.models import AIChatHistory, CustomUser
 
 admin.site.site_header = "Agrowise Administration"
 admin.site.site_title = "Agrowise"
@@ -81,3 +81,8 @@ class UserAdmin(DefaultUserAdmin):
     list_filter = ["date_joined", "gender"]
     readonly_fields = ["uid"]
     search_fields = ["first_name", "last_name", "email", "mobile_no"]
+
+
+@admin.register(AIChatHistory)
+class AIchatHistoryAdmin(admin.ModelAdmin):
+    pass

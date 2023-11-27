@@ -6,7 +6,7 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from agrowise.utils.urls import get_url
-from home.models import CustomUser
+from home.models import AIChatHistory, CustomUser
 
 User = get_user_model()
 
@@ -104,3 +104,17 @@ class OpenAPISerializer(serializers.Serializer):
 
 class WeatherForecastSerializer(serializers.Serializer):
     location = serializers.CharField(max_length=200)
+
+
+class AIChatHistorySerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(many=False)
+
+    class Meta:
+        model = AIChatHistory
+        fields = [
+            "uid",
+            "user",
+            "title",
+            "trunc_title",
+            "response"
+        ]

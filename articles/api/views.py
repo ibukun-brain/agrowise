@@ -14,7 +14,7 @@ class ArticleListAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         qs = Article.objects.select_related('author', "category") \
-            .prefetch_related("comments").filter(status="ready")
+            .prefetch_related("comments").filter(status="published")
         return qs
 
     def get(self, request, *args, **kwargs):

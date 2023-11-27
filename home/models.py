@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import MinLengthValidator
 from django.db import models
+from django.template.defaultfilters import truncatechars
 from django.utils import timezone
 from django_resized import ResizedImageField
 
@@ -68,3 +69,23 @@ class CustomUser(TimeBasedModel, AbstractBaseUser, PermissionsMixin):
             return self.profile_pic.url
 
         return f"http://localhost:8000{settings.STATIC_URL}image/placeholder.jpg"
+
+
+class AIChatHistory(TimeBasedModel):
+    uid = models.UUIDField(default=uuid.uuid4)
+    title = models.CharField(max_length=250)
+    user = auto_prefetch.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE
+    )
+    response = models.TextField()
+
+    @property
+    def trunc_title(self):
+        return truncatechars(self.title, 50)
+
+    def __str__(self):
+        return self.trunc_title
+
+    class Meta:
+        verbose_name_plural = "AI Chat Histories"

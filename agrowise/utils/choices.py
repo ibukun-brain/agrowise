@@ -25,4 +25,4 @@ class SoilTypes(models.TextChoices):
 
 class ArticleChoices(models.TextChoices):
     Draft = ("draft", "Draft")
-    Ready = ("ready", "Ready")
+    Published = ("ready", "Published")
