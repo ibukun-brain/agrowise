@@ -116,5 +116,6 @@ class AIChatHistorySerializer(serializers.ModelSerializer):
             "user",
             "title",
             "trunc_title",
-            "response"
+            "response",
+            "created_at",
         ]

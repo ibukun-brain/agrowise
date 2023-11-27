@@ -45,9 +45,9 @@ class Article(NamedTimeBasedModel):
         return comment
 
     class Meta:
-        ordering = ('name', "-created_at")
+        ordering = ("-created_at", "name")
         indexes = [
-            models.Index(fields=["name", "-created_at"])
+            models.Index(fields=["-created_at", "name"])
         ]
 
 
