@@ -22,11 +22,13 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = [
             "author",
             "category",
+            "image",
             "name",
             "slug",
             "status",
             "content",
             "comment_count",
+            "created_at",
         ]
 
 
