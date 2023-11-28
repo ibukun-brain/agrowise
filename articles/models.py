@@ -12,6 +12,7 @@ class Category(CategoryModel):
 
 
 class Article(NamedTimeBasedModel):
+    name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=True)
     author = auto_prefetch.ForeignKey(
         "home.CustomUser",
@@ -45,7 +46,7 @@ class Article(NamedTimeBasedModel):
         return comment
 
     class Meta:
-        ordering = ('-created_at', "name")
+        ordering = ("-created_at", "name")
         indexes = [
             models.Index(fields=["-created_at", "name"])
         ]
