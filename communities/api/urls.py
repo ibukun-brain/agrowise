@@ -1,10 +1,9 @@
 from django.urls import path
 
-from communities.api.views import (
+from communities.api.views import (  # CommunityPostDetailAPIView,
     AllCommunitiesDetailAPIView,
     AllCommunitiesListAPIView,
     CommunityPostCommentCreateAPIView,
-    CommunityPostCommentDetailAPIView,
     CommunityPostCommentUpdateAPIView,
     CommunityPostsListCreateAPIView,
     CommunityPostsRetrieveUpdateDestroyAPIView,
@@ -36,13 +35,18 @@ urlpatterns = [
         view=CommunityPostsListCreateAPIView.as_view(),
         name="posts",
     ),
-    path(
-        route="community/<slug:slug>/posts/<uuid:uid>/comments/",
-        view=CommunityPostCommentDetailAPIView.as_view(),
-        name="community",
-    ),
+    # path(
+    #     route="community/<slug:slug>/posts/<uuid:uid>/",
+    #     view=CommunityPostDetailAPIView.as_view(),
+    #     name="community",
+    # ),
     path(
         route="community/<slug:slug>/posts/<uuid:uid>/",
+        view=CommunityPostsRetrieveUpdateDestroyAPIView.as_view(),
+        name="posts",
+    ),
+    path(
+        route="community/<slug:slug>/posts/<uuid:uid>/comments/",
         view=CommunityPostCommentCreateAPIView.as_view(),
         name="community",
     ),
@@ -50,11 +54,6 @@ urlpatterns = [
         route="community/<slug:slug>/posts/<uuid:uid>/comments/<uuid:comment_uid>/",
         view=CommunityPostCommentUpdateAPIView.as_view(),
         name="community",
-    ),
-    path(
-        route="community/<slug:slug>/posts/<uuid:uid>/",
-        view=CommunityPostsRetrieveUpdateDestroyAPIView.as_view(),
-        name="posts",
     ),
     path(
         route="community/<slug:slug>/join/",

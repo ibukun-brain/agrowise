@@ -5,7 +5,6 @@ from drf_spectacular.utils import extend_schema
 from openai import OpenAI
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from agrowise.utils.env_variable import get_env_variable
 from home.api.serializers import (
@@ -100,7 +99,8 @@ class OpenAIHistoryDetailView(generics.RetrieveAPIView):
         return qs
 
 
-class WeatherForecastAPIView(APIView):
+class WeatherForecastAPIView(generics.GenericAPIView):
+    serializer_class = WeatherForecastSerializer
     permission_classes = [permissions.AllowAny]
 
     @extend_schema(
