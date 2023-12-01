@@ -8,6 +8,8 @@ from django.db import models
 from django.template.defaultfilters import truncatechars
 from django.utils import timezone
 from django_resized import ResizedImageField
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 
 from agrowise.utils.choices import Gender
 from agrowise.utils.managers import CustomUserManager
@@ -78,6 +80,7 @@ class AIChatHistory(TimeBasedModel):
     response = models.TextField()
 
     @property
+    @extend_schema_field(OpenApiTypes.STR)
     def trunc_title(self):
         return truncatechars(self.title, 50)
 

@@ -2,6 +2,10 @@ import auto_prefetch
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 
+# from django.template.defaultfilters import safe, truncatechars, truncatechars_html
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
+
 from agrowise.utils.choices import ArticleChoices
 from agrowise.utils.media import MediaHelper
 from agrowise.utils.models import CategoryModel, NamedTimeBasedModel, TimeBasedModel
@@ -30,11 +34,7 @@ class Article(NamedTimeBasedModel):
         return self.name
 
     @property
-    def content(self):
-        text = self.text
-        return text
-
-    @property
+    @extend_schema_field(OpenApiTypes.INT)
     def comment_count(self):
         comment = self.comments.count()
         return comment

@@ -84,13 +84,7 @@ class CommunityPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CommunityPost
-        fields = [
-            "uid",
-            "community",
-            "post",
-            "owner",
-            "created_at",
-        ]
+        fields = ["uid", "community", "post", "owner", "created_at", "view_count"]
         extra_kwargs = {
             "uid": {
                 "read_only": True,
@@ -157,4 +151,12 @@ class CommunityPostCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CommunityPost
-        fields = ["uid", "community", "post", "owner", "created_at", "comments"]
+        fields = [
+            "uid",
+            "community",
+            "post",
+            "owner",
+            "created_at",
+            "comments",
+            "view_count",
+        ]

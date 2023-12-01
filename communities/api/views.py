@@ -1,9 +1,10 @@
 from drf_spectacular.utils import OpenApiResponse, extend_schema
-from rest_framework import filters, generics, status
+from hitcount.models import HitCount
+from hitcount.views import HitCountMixin
+from rest_framework import filters, generics, permissions, status
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
-from rest_framework.views import APIView
 
 from communities.api.serializers import (
     CommunityCommentSerializer,
@@ -94,7 +95,9 @@ class JoinCommunityCreateAPIView(generics.CreateAPIView):
         serializer.save(member=self.request.user, community=community)
 
 
-class LeaveCommunityAPIView(UpdateModelMixin, APIView):
+class LeaveCommunityAPIView(UpdateModelMixin, generics.GenericAPIView):
+    serializer_class = CommunityMembershipSerializer
+
     def get_object(self):
         slug = self.kwargs["slug"]
         community = Community()
@@ -172,17 +175,33 @@ class MyCommunitiesListCreateAPIView(generics.ListCreateAPIView):
 
 class CommunityPostsListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = CommunityPostSerializer
+    queryset = CommunityPost.objects.none()
 
     def get_queryset(self):
         slug = self.kwargs["slug"]
-        qs = CommunityPost.objects.select_related("community", "owner").filter(
-            community__slug=slug
-        )
+        try:
+            qs = CommunityPost.objects.select_related("community", "owner").filter(
+                community__slug=slug
+            )
+        except CommunityPost.DoesNotExist as e:
+            raise ValidationError(
+                {"error": "community does not exist"}, code="not found"
+            ) from e
+
         return qs
 
     def get_object(self):
         slug = self.kwargs["slug"]
-        qs = Community.objects.get(slug=slug)
+        try:
+            qs = (
+                Community.objects.select_related("admin")
+                .prefetch_related("members")
+                .get(slug=slug)
+            )
+        except Community.DoesNotExist as e:
+            raise ValidationError(
+                {"error": "community does not exist"}, code="not found"
+            ) from e
         return qs
 
     def get(self, request, *args, **kwargs):
@@ -211,7 +230,16 @@ class CommunityPostsRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyA
     def get_object(self):
         uid = self.kwargs["uid"]
         qs = CommunityPost.objects.get(uid=uid)
+        hit_count = HitCount.objects.get_for_object(qs)
+        hit_count_response = HitCountMixin.hit_count(self.request, hit_count)
+        print(hit_count_response)
         return qs
+
+    def get_serializer_class(self, *args, **kwargs):
+        if self.request.method in permissions.SAFE_METHODS:
+            return CommunityPostCommentSerializer
+
+        return self.serializer_class
 
     def get(self, request, *args, **kwargs):
         """
@@ -228,25 +256,6 @@ class CommunityPostsRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyA
         Endpoint to delete a post in a community
         """
         return self.destroy(request, *args, **kwargs)
-
-
-class CommunityPostCommentDetailAPIView(generics.RetrieveAPIView):
-    serializer_class = CommunityPostCommentSerializer
-
-    def get_object(self):
-        uid = self.kwargs["uid"]
-        qs = (
-            CommunityPost.objects.select_related(
-                "community", "owner", "community__admin"
-            )
-            .prefetch_related("comments__user")
-            .get(uid=uid)
-        )
-        return qs
-
-    def get(self, request, *args, **kwargs):
-        """Get comments for a post"""
-        return self.retrieve(request, *args, **kwargs)
 
 
 class CommunityPostCommentCreateAPIView(generics.CreateAPIView):

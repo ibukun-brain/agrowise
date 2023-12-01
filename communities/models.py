@@ -1,9 +1,13 @@
 import uuid
 
 import auto_prefetch
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.defaultfilters import truncatechars
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
+from hitcount.models import HitCount, HitCountMixin
 
 from agrowise.utils.models import NamedTimeBasedModel, TimeBasedModel
 
@@ -46,7 +50,7 @@ class CommunityMembership(TimeBasedModel):
         return str(self.date_joined)
 
 
-class CommunityPost(TimeBasedModel):
+class CommunityPost(TimeBasedModel, HitCountMixin):
     uid = models.UUIDField(default=uuid.uuid4)
     community = models.ForeignKey(
         Community, on_delete=models.CASCADE, related_name="community_post"
@@ -55,6 +59,20 @@ class CommunityPost(TimeBasedModel):
     owner = models.ForeignKey(
         "home.CustomUser", on_delete=models.CASCADE, related_name="community_post"
     )
+    hit_count_generic = GenericRelation(
+        HitCount,
+        object_id_field="object_pk",
+        related_query_name="hit_count_generic_relation",
+    )
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [models.Index(fields=["-created_at"])]
+
+    @property
+    @extend_schema_field(OpenApiTypes.INT)
+    def view_count(self):
+        return self.hit_count.hits
 
     @property
     def trunc_post(self):

@@ -2,6 +2,10 @@ from rest_framework import serializers
 
 from articles.models import Article, Category, Comment
 
+# from drf_spectacular.utils import extend_schema_field
+# from drf_spectacular.types import OpenApiTypes
+
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,13 +29,13 @@ class ArticleSerializer(serializers.ModelSerializer):
             "name",
             "slug",
             "status",
-            "content",
+            "text",
             "comment_count",
             "created_at",
         ]
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class UserCommentSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(many=False, read_only=True)
 
     class Meta:
@@ -59,7 +63,7 @@ class UserArticleCommentSerializer(serializers.ModelSerializer):
 
 class ArticleCommentSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(many=False)
-    comments = CommentSerializer(many=True, read_only=False)
+    comments = UserCommentSerializer(many=True, read_only=False)
     category = serializers.StringRelatedField(many=False)
 
     class Meta:
