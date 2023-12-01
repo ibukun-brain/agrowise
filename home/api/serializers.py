@@ -111,4 +111,11 @@ class AIChatHistorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AIChatHistory
-        fields = ["uid", "user", "title", "trunc_title", "response"]
+        fields = [
+            "uid",
+            "user",
+            "title",
+            "trunc_title",
+            "response",
+            "created_at",
+        ]
