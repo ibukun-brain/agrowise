@@ -25,9 +25,6 @@ class CommunitySerializer(serializers.ModelSerializer):
         ]
    
     def create(self, validated_data):
-        return Community.object.create(**validated_data)
-
-    def create(self, validated_data):
         return Community.objects.create(**validated_data)
 
     def to_representation(self, instance):
