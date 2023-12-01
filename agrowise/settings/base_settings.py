@@ -31,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-cejw_hrvyh$36i4-m5l148_(zt+0i%14t#x+=eo=dwon++ld6_"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "farms",
     "communities",
     # third party libraries
+    "hitcount",
     "ckeditor",
     "ckeditor_uploader",
     "corsheaders",

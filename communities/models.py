@@ -46,7 +46,7 @@ class CommunityMembership(TimeBasedModel):
         return str(self.date_joined)
 
 
-class CommunityPost(TimeBasedModel):
+class CommunityPost(TimeBasedModel,):
     uid = models.UUIDField(default=uuid.uuid4)
     community = models.ForeignKey(
         Community, on_delete=models.CASCADE, related_name="community_post"
