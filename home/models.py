@@ -74,10 +74,7 @@ class CustomUser(TimeBasedModel, AbstractBaseUser, PermissionsMixin):
 class AIChatHistory(TimeBasedModel):
     uid = models.UUIDField(default=uuid.uuid4)
     title = models.CharField(max_length=250)
-    user = auto_prefetch.ForeignKey(
-        CustomUser,
-        on_delete=models.CASCADE
-    )
+    user = auto_prefetch.ForeignKey(CustomUser, on_delete=models.CASCADE)
     response = models.TextField()
 
     @property

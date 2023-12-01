@@ -54,10 +54,9 @@ class OpenAPIView(generics.CreateAPIView):
                 temperature=0.5,
             )
             response = chat_completion.choices[0].message.content
-            resp = Response(data={
-                "title": text,
-                "data": response
-            }, status=status.HTTP_200_OK)
+            resp = Response(
+                data={"title": text, "data": response}, status=status.HTTP_200_OK
+            )
             if response != "can't answer this!":
                 AIChatHistory.objects.create(
                     title=text,
@@ -81,8 +80,7 @@ class OpenAIHistoryListView(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
     def get_queryset(self):
-        qs = AIChatHistory.objects.select_related("user") \
-            .filter(user=self.request.user)
+        qs = AIChatHistory.objects.select_related("user").filter(user=self.request.user)
         return qs
 
 
@@ -98,8 +96,7 @@ class OpenAIHistoryDetailView(generics.RetrieveAPIView):
 
     def get_object(self):
         uid = self.kwargs["uid"]
-        qs = AIChatHistory.objects.select_related("user") \
-            .get(uid=uid)
+        qs = AIChatHistory.objects.select_related("user").get(uid=uid)
         return qs
 
 

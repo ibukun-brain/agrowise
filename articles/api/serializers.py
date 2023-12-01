@@ -4,7 +4,6 @@ from articles.models import Article, Category, Comment
 
 
 class CategorySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Category
         fields = [

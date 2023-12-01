@@ -27,6 +27,9 @@ class CommunitySerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return Community.object.create(**validated_data)
 
+    def create(self, validated_data):
+        return Community.objects.create(**validated_data)
+
     def to_representation(self, instance):
         request = self.context["request"]
         current_user = request.user
@@ -68,14 +71,18 @@ class CommunityMembershipSerializer(serializers.ModelSerializer):
         except IntegrityError as e:
             raise serializers.ValidationError(
                 {
-                    "error": "You are a member of this community",
+                    "detail": "You are a member of this community",
                 },
-                code=400,
             ) from e
+
+    def update(self, instance, validated_data):
+        community = instance.community
+        community.members.remove(instance.member)
+        return instance
 
 
 class CommunityPostSerializer(serializers.ModelSerializer):
-    community = CommunitySerializer(many=False, read_only=True)
+    community = serializers.StringRelatedField(many=False, read_only=True)
     owner = serializers.StringRelatedField(many=False)
 
     class Meta:
@@ -83,22 +90,74 @@ class CommunityPostSerializer(serializers.ModelSerializer):
         fields = [
             "uid",
             "community",
-            "name",
-            "slug",
+            "post",
             "owner",
             "created_at",
         ]
+        extra_kwargs = {
+            "uid": {
+                "read_only": True,
+            }
+        }
+
+    def create(self, validated_data):
+        owner = validated_data.get("owner", None)
+        community = validated_data.get("community", None)
+        if owner not in community.members.all():
+            raise serializers.ValidationError(
+                {"detail": "You must be a member of this community"}
+            )
+        return CommunityPost.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.post = validated_data.get("post")
+        instance.save()
+        return instance
 
 
-class CommunityCommentSerializer(serializers.Serializer):
+class CommunityCommentSerializer(serializers.ModelSerializer):
     community_post = CommunityPostSerializer(many=False, read_only=True)
-    member = serializers.StringRelatedField()
+    # community_post = serializers.HiddenField(
+    #     default=CommunityPostSerializer
+    # )
+    user = serializers.StringRelatedField()
 
     class Meta:
         model = CommunityPostComment
         fields = [
             "community_post",
-            "member",
+            "user",
             "text",
             "created_at",
         ]
+
+    def create(self, validated_data):
+        return CommunityPostComment.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.text = validated_data.get("text")
+        instance.save()
+        return instance
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+
+    class Meta:
+        model = CommunityPostComment
+        fields = [
+            "uid",
+            "user",
+            "text",
+            "created_at",
+        ]
+
+
+class CommunityPostCommentSerializer(serializers.ModelSerializer):
+    community = serializers.StringRelatedField(many=False, read_only=True)
+    owner = serializers.StringRelatedField(many=False)
+    comments = CommentSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = CommunityPost
+        fields = ["uid", "community", "post", "owner", "created_at", "comments"]
