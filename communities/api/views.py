@@ -6,8 +6,8 @@ from rest_framework.serializers import ValidationError
 from rest_framework.views import APIView
 
 from communities.api.serializers import (
-    CommunityMembershipSerializer,
     CommunityCommentSerializer,
+    CommunityMembershipSerializer,
     CommunityPostCommentSerializer,
     CommunityPostSerializer,
     CommunitySerializer,
@@ -30,12 +30,10 @@ class AllCommunitiesListAPIView(generics.ListAPIView):
         summary="Get all communities",
         request=CommunitySerializer,
         responses={
-            status.HTTP_200_OK: OpenApiResponse(
-                description="Success"
-            ),
+            status.HTTP_200_OK: OpenApiResponse(description="Success"),
             status.HTTP_401_UNAUTHORIZED: OpenApiResponse(
                 description="You are unauthorized to access this endpoint"
-            )
+            ),
         },
         # more customizations
     )
@@ -69,10 +67,7 @@ class AllCommunitiesDetailAPIView(generics.RetrieveAPIView):
                 .get(slug=slug)
             )
         except Community.DoesNotExist as e:
-            raise ValidationError(
-                {
-                    "error": "community does not exist!"
-                }) from e
+            raise ValidationError({"error": "community does not exist!"}) from e
         return qs
 
 
@@ -95,15 +90,11 @@ class JoinCommunityCreateAPIView(generics.CreateAPIView):
                 .get(slug=slug)
             )
         except Community.DoesNotExist as e:
-            raise ValidationError(
-                {
-                    "error": "community does not exist!"
-                }) from e
+            raise ValidationError({"error": "community does not exist!"}) from e
         serializer.save(member=self.request.user, community=community)
 
 
 class LeaveCommunityAPIView(UpdateModelMixin, APIView):
-
     def get_object(self):
         slug = self.kwargs["slug"]
         community = Community()
@@ -114,42 +105,35 @@ class LeaveCommunityAPIView(UpdateModelMixin, APIView):
                 .get(slug=slug)
             )
         except Community.DoesNotExist as e:
-            raise ValidationError(
-                {
-                    "detail": "community does not exist!"
-                }) from e
+            raise ValidationError({"detail": "community does not exist!"}) from e
         try:
             community_membership = CommunityMembership.objects.get(
-                community=community,
-                member=self.request.user
+                community=community, member=self.request.user
             )
         except CommunityMembership.DoesNotExist as e:
-            raise ValidationError({
-                "detail": "You are not a member of this community"
-            }) from e
+            raise ValidationError(
+                {"detail": "You are not a member of this community"}
+            ) from e
         return community_membership
 
     def put(self, request, *args, **kwargs):
         """
         Endpoint to leave a community
         """
-        partial = kwargs.pop('partial', False)
+        partial = kwargs.pop("partial", False)
         serializer = CommunityMembershipSerializer(
-            instance=self.get_object(),
-            data=request.data,
-            partial=partial
+            instance=self.get_object(), data=request.data, partial=partial
         )
         if serializer.is_valid(raise_exception=True):
             self.perform_update(serializer)
             return Response(
-                {
-                    "detail": "You have successfully leave this community"
-                },
-                status=status.HTTP_200_OK
+                {"detail": "You have successfully leave this community"},
+                status=status.HTTP_200_OK,
             )
-        return Response({
-            "detail": "Cannot process this request"
-        }, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"detail": "Cannot process this request"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 class MyCommunitiesListCreateAPIView(generics.ListCreateAPIView):
@@ -191,16 +175,14 @@ class CommunityPostsListCreateAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         slug = self.kwargs["slug"]
-        qs = CommunityPost.objects.select_related(
-            "community", "owner"
-        ).filter(community__slug=slug)
+        qs = CommunityPost.objects.select_related("community", "owner").filter(
+            community__slug=slug
+        )
         return qs
 
     def get_object(self):
         slug = self.kwargs["slug"]
-        qs = Community.objects.get(
-            slug=slug
-        )
+        qs = Community.objects.get(slug=slug)
         return qs
 
     def get(self, request, *args, **kwargs):
@@ -228,9 +210,7 @@ class CommunityPostsRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyA
 
     def get_object(self):
         uid = self.kwargs["uid"]
-        qs = CommunityPost.objects.get(
-            uid=uid
-        )
+        qs = CommunityPost.objects.get(uid=uid)
         return qs
 
     def get(self, request, *args, **kwargs):
@@ -255,10 +235,13 @@ class CommunityPostCommentDetailAPIView(generics.RetrieveAPIView):
 
     def get_object(self):
         uid = self.kwargs["uid"]
-        qs = CommunityPost.objects.select_related(
-            "community", "owner",
-            "community__admin"
-        ).prefetch_related("comments__user").get(uid=uid)
+        qs = (
+            CommunityPost.objects.select_related(
+                "community", "owner", "community__admin"
+            )
+            .prefetch_related("comments__user")
+            .get(uid=uid)
+        )
         return qs
 
     def get(self, request, *args, **kwargs):
@@ -272,17 +255,22 @@ class CommunityPostCommentCreateAPIView(generics.CreateAPIView):
 
     def get_object(self):
         uid = self.kwargs["uid"]
-        qs = CommunityPost.objects.select_related(
-            "community", "owner",
-            "community__admin"
-        ).prefetch_related("comments__user").get(uid=uid)
+        qs = (
+            CommunityPost.objects.select_related(
+                "community", "owner", "community__admin"
+            )
+            .prefetch_related("comments__user")
+            .get(uid=uid)
+        )
         return qs
 
     def get_queryset(self):
         uid = self.kwargs["uid"]
         qs = CommunityPostComment.objects.select_related(
-            "community_post", "user",
-            "community_post__owner", "community_post__community"
+            "community_post",
+            "user",
+            "community_post__owner",
+            "community_post__community",
         ).filter(community_post__uid=uid)
         return qs
 
@@ -293,10 +281,7 @@ class CommunityPostCommentCreateAPIView(generics.CreateAPIView):
         return self.create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
-        serializer.save(
-            community_post=self.get_object(),
-            user=self.request.user
-        )
+        serializer.save(community_post=self.get_object(), user=self.request.user)
 
 
 class CommunityPostCommentUpdateAPIView(generics.RetrieveUpdateAPIView):
@@ -306,8 +291,10 @@ class CommunityPostCommentUpdateAPIView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         uid = self.kwargs["comment_uid"]
         qs = CommunityPostComment.objects.select_related(
-            "community_post", "user",
-            "community_post__owner", "community_post__community"
+            "community_post",
+            "user",
+            "community_post__owner",
+            "community_post__community",
         ).get(uid=uid)
         return qs
 
@@ -318,7 +305,4 @@ class CommunityPostCommentUpdateAPIView(generics.RetrieveUpdateAPIView):
         return self.update(request, *args, **kwargs)
 
     def perform_update(self, serializer):
-        serializer.save(
-            community_post=self.get_object(),
-            user=self.request.user
-        )
+        serializer.save(community_post=self.get_object(), user=self.request.user)

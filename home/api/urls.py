@@ -9,12 +9,12 @@ urlpatterns = [
     path(
         route="openapi/history/",
         view=home_api_view.OpenAIHistoryListView.as_view(),
-        name="openapi-history"
+        name="openapi-history",
     ),
     path(
         route="openapi/history/<uuid:uid>/",
         view=home_api_view.OpenAIHistoryDetailView.as_view(),
-        name="openapi-history-detail"
+        name="openapi-history-detail",
     ),
     path(
         "weather-forecast/",

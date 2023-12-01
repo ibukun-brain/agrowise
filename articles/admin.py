@@ -23,7 +23,7 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ["article__name"]
 
     def trunc_text(self, obj):
-        return truncatewords(obj.text)
+        return truncatewords(obj.text, 10)
 
     trunc_text.short_description = "truncated text"
 

@@ -3,9 +3,9 @@ import uuid
 import auto_prefetch
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.template.defaultfilters import truncatechars
 
 from agrowise.utils.models import NamedTimeBasedModel, TimeBasedModel
-from django.template.defaultfilters import truncatechars
 
 
 class Community(NamedTimeBasedModel):
@@ -49,15 +49,11 @@ class CommunityMembership(TimeBasedModel):
 class CommunityPost(TimeBasedModel):
     uid = models.UUIDField(default=uuid.uuid4)
     community = models.ForeignKey(
-        Community,
-        on_delete=models.CASCADE,
-        related_name="community_post"
+        Community, on_delete=models.CASCADE, related_name="community_post"
     )
     post = models.TextField()
     owner = models.ForeignKey(
-        "home.CustomUser",
-        on_delete=models.CASCADE,
-        related_name="community_post"
+        "home.CustomUser", on_delete=models.CASCADE, related_name="community_post"
     )
 
     @property
@@ -72,7 +68,7 @@ class CommunityPost(TimeBasedModel):
         # with a dictionary, where the keys are the field names.
         if self.owner not in self.community.members.all():
             raise ValidationError(
-                {'owner': ('You must be a member of this community')}
+                {"owner": ("You must be a member of this community")}
                 # {'name': ('invalid name')} for errors multiple fields
             )
 
@@ -80,9 +76,7 @@ class CommunityPost(TimeBasedModel):
 class CommunityPostComment(TimeBasedModel):
     uid = models.UUIDField(default=uuid.uuid4)
     community_post = auto_prefetch.ForeignKey(
-        CommunityPost,
-        on_delete=models.CASCADE,
-        related_name="comments"
+        CommunityPost, on_delete=models.CASCADE, related_name="comments"
     )
     user = models.ForeignKey("home.CustomUser", on_delete=models.CASCADE)
     text = models.TextField()
@@ -92,6 +86,4 @@ class CommunityPostComment(TimeBasedModel):
 
     class Meta:
         ordering = ("-created_at",)
-        indexes = [
-            models.Index(fields=["-created_at"])
-        ]
+        indexes = [models.Index(fields=["-created_at"])]

@@ -7,16 +7,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 CKEDITOR_RESTRICT_BY_USER = True
 CKEDITOR_REQUIRE_STAFF = False
 CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'full',
-        'height': 400,
-        'width': "100%",
-        'extraPlugins': ','.join([
-            'uploadimage',  # the upload image feature
-            # your extra plugins here
-            # 'Youtube',
-            # 'codesnippet',
-        ]),
+    "default": {
+        "toolbar": "full",
+        "height": 400,
+        "width": "100%",
+        "extraPlugins": ",".join(
+            [
+                "uploadimage",  # the upload image feature
+                # your extra plugins here
+                # 'Youtube',
+                # 'codesnippet',
+            ]
+        ),
     },
 }
 

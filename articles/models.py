@@ -4,7 +4,7 @@ from django.db import models
 
 from agrowise.utils.choices import ArticleChoices
 from agrowise.utils.media import MediaHelper
-from agrowise.utils.models import NamedTimeBasedModel, TimeBasedModel, CategoryModel
+from agrowise.utils.models import CategoryModel, NamedTimeBasedModel, TimeBasedModel
 
 
 class Category(CategoryModel):
@@ -14,14 +14,8 @@ class Category(CategoryModel):
 class Article(NamedTimeBasedModel):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=True)
-    author = auto_prefetch.ForeignKey(
-        "home.CustomUser",
-        on_delete=models.CASCADE
-    )
-    category = auto_prefetch.ForeignKey(
-        Category,
-        on_delete=models.CASCADE
-    )
+    author = auto_prefetch.ForeignKey("home.CustomUser", on_delete=models.CASCADE)
+    category = auto_prefetch.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(
         upload_to=MediaHelper.get_image_upload_path,
     )
@@ -47,16 +41,12 @@ class Article(NamedTimeBasedModel):
 
     class Meta:
         ordering = ("-created_at", "name")
-        indexes = [
-            models.Index(fields=["-created_at", "name"])
-        ]
+        indexes = [models.Index(fields=["-created_at", "name"])]
 
 
 class Comment(TimeBasedModel):
     article = auto_prefetch.ForeignKey(
-        Article,
-        on_delete=models.CASCADE,
-        related_name="comments"
+        Article, on_delete=models.CASCADE, related_name="comments"
     )
     user = auto_prefetch.ForeignKey(
         "home.CustomUser",
@@ -69,6 +59,4 @@ class Comment(TimeBasedModel):
 
     class Meta:
         ordering = ("-created_at",)
-        indexes = [
-            models.Index(fields=["-created_at"])
-        ]
+        indexes = [models.Index(fields=["-created_at"])]

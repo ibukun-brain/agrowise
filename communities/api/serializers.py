@@ -101,9 +101,9 @@ class CommunityPostSerializer(serializers.ModelSerializer):
         owner = validated_data.get("owner", None)
         community = validated_data.get("community", None)
         if owner not in community.members.all():
-            raise serializers.ValidationError({
-                "detail": "You must be a member of this community"
-            })
+            raise serializers.ValidationError(
+                {"detail": "You must be a member of this community"}
+            )
         return CommunityPost.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
@@ -132,7 +132,7 @@ class CommunityCommentSerializer(serializers.ModelSerializer):
         return CommunityPostComment.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.text = validated_data.get('text')
+        instance.text = validated_data.get("text")
         instance.save()
         return instance
 
@@ -153,17 +153,8 @@ class CommentSerializer(serializers.ModelSerializer):
 class CommunityPostCommentSerializer(serializers.ModelSerializer):
     community = serializers.StringRelatedField(many=False, read_only=True)
     owner = serializers.StringRelatedField(many=False)
-    comments = CommentSerializer(
-        many=True, read_only=True
-    )
+    comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = CommunityPost
-        fields = [
-            "uid",
-            "community",
-            "post",
-            "owner",
-            "created_at",
-            "comments"
-        ]
+        fields = ["uid", "community", "post", "owner", "created_at", "comments"]

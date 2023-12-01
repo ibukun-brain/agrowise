@@ -5,19 +5,15 @@ from articles.api.views import ArticleDetailAPIView, ArticleListAPIView, Comment
 app_name = "articles"
 
 urlpatterns = [
-    path(
-        route="articles/",
-        view=ArticleListAPIView.as_view(),
-        name="articles"
-    ),
+    path(route="articles/", view=ArticleListAPIView.as_view(), name="articles"),
     path(
         route="articles/<slug:slug>/",
         view=ArticleDetailAPIView.as_view(),
-        name="article"
+        name="article",
     ),
     path(
         route="articles/<slug:slug>/comments/",
         view=CommentAPIView.as_view(),
-        name="article"
+        name="article",
     ),
 ]

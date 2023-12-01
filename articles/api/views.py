@@ -13,8 +13,11 @@ class ArticleListAPIView(generics.ListAPIView):
     serializer_class = ArticleSerializer
 
     def get_queryset(self):
-        qs = Article.objects.select_related('author', "category") \
-            .prefetch_related("comments").filter(status="published")
+        qs = (
+            Article.objects.select_related("author", "category")
+            .prefetch_related("comments")
+            .filter(status="published")
+        )
         return qs
 
     def get(self, request, *args, **kwargs):
@@ -30,9 +33,12 @@ class ArticleDetailAPIView(generics.RetrieveAPIView):
     lookup_url_kwarg = "slug"
 
     def get_object(self):
-        slug = self.kwargs['slug']
-        qs = Article.objects.select_related('author', "category") \
-            .prefetch_related("comments").get(slug=slug)
+        slug = self.kwargs["slug"]
+        qs = (
+            Article.objects.select_related("author", "category")
+            .prefetch_related("comments")
+            .get(slug=slug)
+        )
         return qs
 
     def get(self, request, *args, **kwargs):
@@ -46,7 +52,7 @@ class CommentAPIView(generics.CreateAPIView):
     serializer_class = UserArticleCommentSerializer
 
     def get_queryset(self):
-        qs = Comment.objects.select_related('article', 'user').all()
+        qs = Comment.objects.select_related("article", "user").all()
         return qs
 
     def post(self, request, *args, **kwargs):
@@ -57,6 +63,9 @@ class CommentAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         slug = self.kwargs["slug"]
-        article = Article.objects.select_related('author', "category") \
-            .prefetch_related("comments").get(slug=slug)
+        article = (
+            Article.objects.select_related("author", "category")
+            .prefetch_related("comments")
+            .get(slug=slug)
+        )
         serializer.save(user=self.request.user, article=article)

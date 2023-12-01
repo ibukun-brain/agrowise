@@ -39,17 +39,17 @@ urlpatterns = [
     path(
         route="community/<slug:slug>/posts/<uuid:uid>/comments/",
         view=CommunityPostCommentDetailAPIView.as_view(),
-        name="community"
+        name="community",
     ),
     path(
         route="community/<slug:slug>/posts/<uuid:uid>/",
         view=CommunityPostCommentCreateAPIView.as_view(),
-        name="community"
+        name="community",
     ),
     path(
         route="community/<slug:slug>/posts/<uuid:uid>/comments/<uuid:comment_uid>/",
         view=CommunityPostCommentUpdateAPIView.as_view(),
-        name="community"
+        name="community",
     ),
     path(
         route="community/<slug:slug>/posts/<uuid:uid>/",
