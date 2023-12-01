@@ -1,9 +1,11 @@
 import uuid
 
 import auto_prefetch
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from agrowise.utils.models import NamedTimeBasedModel, TimeBasedModel
+from django.template.defaultfilters import truncatechars
 
 
 class Community(NamedTimeBasedModel):
@@ -46,13 +48,33 @@ class CommunityMembership(TimeBasedModel):
 
 class CommunityPost(TimeBasedModel):
     uid = models.UUIDField(default=uuid.uuid4)
-    community = models.ForeignKey(Community, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, blank=True)
-    owner = models.ForeignKey("home.CustomUser", on_delete=models.CASCADE)
+    community = models.ForeignKey(
+        Community,
+        on_delete=models.CASCADE,
+        related_name="community_post"
+    )
+    post = models.TextField()
+    owner = models.ForeignKey(
+        "home.CustomUser",
+        on_delete=models.CASCADE,
+        related_name="community_post"
+    )
+
+    @property
+    def trunc_post(self):
+        return truncatechars(self.post, 50)
 
     def __str__(self):
-        return self.name
+        return self.trunc_post
+
+    def clean(self):
+        # To assign exceptions to a specific field instantiate the ValidationError
+        # with a dictionary, where the keys are the field names.
+        if self.owner not in self.community.members.all():
+            raise ValidationError(
+                {'owner': ('You must be a member of this community')}
+                # {'name': ('invalid name')} for errors multiple fields
+            )
 
 
 class CommunityPostComment(TimeBasedModel):
@@ -60,11 +82,16 @@ class CommunityPostComment(TimeBasedModel):
     community_post = auto_prefetch.ForeignKey(
         CommunityPost,
         on_delete=models.CASCADE,
-        # null=True,
-        # blank=True
+        related_name="comments"
     )
-    member = models.ForeignKey("home.CustomUser", on_delete=models.CASCADE)
+    user = models.ForeignKey("home.CustomUser", on_delete=models.CASCADE)
     text = models.TextField()
 
     def __str__(self):
-        return f"{self.member} ----> {self.community_post.name}"
+        return f"{self.user}"
+
+    class Meta:
+        ordering = ("-created_at",)
+        indexes = [
+            models.Index(fields=["-created_at"])
+        ]

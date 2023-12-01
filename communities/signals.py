@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.text import slugify
 
-from communities.models import Community, CommunityMembership, CommunityPost
+from communities.models import Community, CommunityMembership
 
 
 def create_slug(model, instance, new_slug=None):
@@ -41,16 +41,3 @@ def post_save_add_admin_to_community_membership(sender, instance, created, **kwa
         CommunityMembership.objects.create(
             community=instance, member=instance.admin, date_joined=timezone.now()
         )
-
-
-@receiver(pre_save, sender=CommunityPost)
-def pre_save_community_post_slug_reciever(sender, instance, **kwargs):
-    community_post = CommunityPost()
-    if not instance.slug:
-        instance.slug = create_slug(CommunityPost, instance)
-    try:
-        community_post = CommunityPost.objects.get(pk=instance.pk)
-    except CommunityPost.DoesNotExist:
-        pass
-    if instance.name != community_post.name:
-        instance.slug = create_slug(Community, instance)
