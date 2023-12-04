@@ -1,4 +1,5 @@
-from rest_framework import generics, permissions
+from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
+from rest_framework import generics, permissions, status
 
 from articles.api.serializers import (
     ArticleCommentSerializer,
@@ -20,6 +21,28 @@ class ArticleListAPIView(generics.ListAPIView):
         )
         return qs
 
+    @extend_schema(
+            responses={
+                status.HTTP_200_OK: OpenApiResponse(
+                    response=ArticleSerializer,
+                    description="Success"
+                ),
+                status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                        response={
+                            "error": "Bad request",
+                        },
+                        description="Bad Request",
+                        examples=[
+                            OpenApiExample(
+                                "Bad Request Response",
+                                value={
+                                    "error": "Bad Request"
+                                }
+                            )
+                        ]
+                    )
+            }
+    )
     def get(self, request, *args, **kwargs):
         """
         This Endpoint returns all articles
