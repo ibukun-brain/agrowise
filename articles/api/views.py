@@ -22,26 +22,22 @@ class ArticleListAPIView(generics.ListAPIView):
         return qs
 
     @extend_schema(
-            responses={
-                status.HTTP_200_OK: OpenApiResponse(
-                    response=ArticleSerializer,
-                    description="Success"
-                ),
-                status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-                        response={
-                            "error": "Bad request",
-                        },
-                        description="Bad Request",
-                        examples=[
-                            OpenApiExample(
-                                "Bad Request Response",
-                                value={
-                                    "error": "Bad Request"
-                                }
-                            )
-                        ]
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                response=ArticleSerializer, description="Success"
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                response={
+                    "error": "Bad request",
+                },
+                description="Bad Request",
+                examples=[
+                    OpenApiExample(
+                        "Bad Request Response", value={"error": "Bad Request"}
                     )
-            }
+                ],
+            ),
+        }
     )
     def get(self, request, *args, **kwargs):
         """

@@ -1,8 +1,8 @@
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
 from articles.models import Article, Category, Comment
 
-from drf_spectacular.utils import extend_schema_serializer, OpenApiExample
 # from drf_spectacular.types import OpenApiTypes
 
 
@@ -18,8 +18,8 @@ class CategorySerializer(serializers.ModelSerializer):
 @extend_schema_serializer(
     examples=[
         OpenApiExample(
-            'Article Success Response Example',
-            summary='Success Response',
+            "Article Success Response Example",
+            summary="Success Response",
             value={
                 "author": "ibukunolaifa1984@gmail.com",
                 "category": "Guides",
@@ -29,21 +29,21 @@ class CategorySerializer(serializers.ModelSerializer):
                 "status": "published",
                 "text": "<p>sdasdas</p>",
                 "comment_count": 1,
-                "created_at": "2023-11-26T17:12:47.615164+01:00"
+                "created_at": "2023-11-26T17:12:47.615164+01:00",
             },
             # request_only=True, # signal that example only applies to requests
             # response_only=True, # signal that example only applies to responses
-            status_codes=[200]
+            status_codes=[200],
         ),
         OpenApiExample(
-            'Article Bad Request Response Example',
-            summary='Error Response',
+            "Article Bad Request Response Example",
+            summary="Error Response",
             # description='longer description',
             value={
                 "error": "Bad Request",
             },
-            status_codes=[400]
-        )
+            status_codes=[400],
+        ),
     ],
 )
 class ArticleSerializer(serializers.ModelSerializer):
