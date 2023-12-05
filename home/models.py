@@ -72,6 +72,9 @@ class CustomUser(TimeBasedModel, AbstractBaseUser, PermissionsMixin):
 
         return f"http://localhost:8000{settings.STATIC_URL}image/placeholder.jpg"
 
+    def __str__(self):
+        return self.get_full_name() or self.email
+
 
 class AIChatHistory(TimeBasedModel):
     uid = models.UUIDField(default=uuid.uuid4)
